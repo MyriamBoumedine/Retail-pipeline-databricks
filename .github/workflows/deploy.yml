@@ -12,11 +12,17 @@ jobs:
 
     steps:
       # 1. Récupère le code du repo (équivalent d'un git clone)
+      # On le place dans un dossier nommé "repo" (différent du nom du repo)
+      # pour éviter un bug connu de la CLI Databricks avec les noms de
+      # dossiers dupliqués (ex: .../Retail-pipeline-databricks/Retail-pipeline-databricks)
       - name: Checkout du code
         uses: actions/checkout@v4
+        with:
+          path: repo
 
       # ÉTAPE TEMPORAIRE DE DIAGNOSTIC — à retirer une fois le problème résolu
       - name: Debug - afficher la structure des dossiers
+        working-directory: repo
         run: |
           echo "Répertoire courant :"
           pwd
@@ -31,6 +37,7 @@ jobs:
 
       # 3. Valide le bundle avant de déployer (sécurité supplémentaire)
       - name: Valider le bundle
+        working-directory: repo
         run: databricks bundle validate
         env:
           DATABRICKS_HOST: ${{ secrets.DATABRICKS_HOST }}
@@ -38,6 +45,7 @@ jobs:
 
       # 4. Déploie réellement le job sur Databricks
       - name: Déployer le bundle
+        working-directory: repo
         run: databricks bundle deploy --target dev
         env:
           DATABRICKS_HOST: ${{ secrets.DATABRICKS_HOST }}
