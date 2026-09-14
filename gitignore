@@ -1,0 +1,24 @@
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+.venv/
+venv/
+
+# Databricks
+.databricks/
+databricks.yml.bak
+*.dbc
+
+# Secrets / config locale — NE JAMAIS versionner de token ici
+.env
+*.token
+config.local.*
+
+# OS / éditeurs
+.DS_Store
+.vscode/
+.idea/
+
+# Databricks Asset Bundles (généré à l'étape suivante)
+.bundle/
