@@ -15,6 +15,16 @@ jobs:
       - name: Checkout du code
         uses: actions/checkout@v4
 
+      # ÉTAPE TEMPORAIRE DE DIAGNOSTIC — à retirer une fois le problème résolu
+      - name: Debug - afficher la structure des dossiers
+        run: |
+          echo "Répertoire courant :"
+          pwd
+          echo "Contenu :"
+          ls -la
+          echo "Contenu de notebooks/ :"
+          ls -la notebooks
+
       # 2. Installe la CLI Databricks sur la machine virtuelle GitHub
       - name: Installer la CLI Databricks
         uses: databricks/setup-cli@main
