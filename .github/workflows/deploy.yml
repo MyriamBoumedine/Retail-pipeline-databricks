@@ -1,0 +1,34 @@
+name: Deploy Databricks Bundle
+
+# Déclenche ce workflow à chaque push sur la branche main
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      # 1. Récupère le code du repo (équivalent d'un git clone)
+      - name: Checkout du code
+        uses: actions/checkout@v4
+
+      # 2. Installe la CLI Databricks sur la machine virtuelle GitHub
+      - name: Installer la CLI Databricks
+        uses: databricks/setup-cli@main
+
+      # 3. Valide le bundle avant de déployer (sécurité supplémentaire)
+      - name: Valider le bundle
+        run: databricks bundle validate
+        env:
+          DATABRICKS_HOST: ${{ secrets.DATABRICKS_HOST }}
+          DATABRICKS_TOKEN: ${{ secrets.DATABRICKS_TOKEN }}
+
+      # 4. Déploie réellement le job sur Databricks
+      - name: Déployer le bundle
+        run: databricks bundle deploy --target dev
+        env:
+          DATABRICKS_HOST: ${{ secrets.DATABRICKS_HOST }}
+          DATABRICKS_TOKEN: ${{ secrets.DATABRICKS_TOKEN }}
